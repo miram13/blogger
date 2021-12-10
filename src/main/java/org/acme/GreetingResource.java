@@ -1,55 +1,57 @@
 package org.acme;
 
-
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.Produces;
 import java.util.List;
 
-@Path("/Blog")
+@Path("/blogs")
 public class GreetingResource {
 
-    BloggingService bloggingService = new BloggingService();
-    PostingService postingService = new PostingService();
+
+    @Inject
+    BloggingService bloggingService;
 
     @GET
-    public String Blog() {
-        return "Read All Blogs";
+    @Path("/blog")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Blog> Blogwithqwery(@QueryParam("name") String name) {
+        return (List<Blog>) bloggingService.getBlogs();
     }
 
-    @GET
-    @Path("/listablog")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Blog> Blogwithquery(@QueryParam("name") String name,@QueryParam("author") String author) {
-        return bloggingService.getBlog();
-
-    }
-
-    @POST
-    @Path("/Query")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Blog PostBlog(@QueryParam("name") String name, @QueryParam("author") String author) {
-        return postingService.postBlog(name , author);
-    }
-    @GET
-    @Path("/readablog")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String readablog (@PathParam("Blog") String Blog){
-        return "read a blog by a bloggerNettle and Blackberry:\n" +
-                "If you’re a fan of lifestyle blogs then here’s another! Imogen’s a graduate from Durham and her page is very chatty and friendly. Her ‘thought’ section is like having a chat with a friend as she discusses issues almost all of us can relate to. It’s a challenge to come away from her page without a smile on your face!";
-    }
 //    @GET
-//    @Path("/readablog")
+//    @Path("/readblog")
 //    @Produces(MediaType.APPLICATION_JSON)
-//    public List<Blog> Blogwithquery(@QueryParam("name") String name,@QueryParam("author") String author ,@QueryParam("read") String read) {
-//        return ReadingService.readablog();
+//    public String readblog (@PathParam("Blog") String Blog){
+//        return "read a blog by blogger";
 //    }
 
+    @POST
+    @Path("/blog")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Blog PostBlog(@QueryParam("name") String name, @QueryParam("author") String author) {
+        return bloggingService.postBlog(name , author);
+    }
+
+    @PUT
+    @Path("/blog")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Blog updateBlogbyname(@QueryParam("name") String name, @QueryParam("author") String author) {
+        return bloggingService.updateBlogbyname(name, author);
+    }
+
+    @GET
+    @Path("/blog/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Blog getBlogbyname(@PathParam("name") String name){
+        return bloggingService.getBlogbyname(name);
+    }
+
     @DELETE
-    @Path("/delete")
-    public String removequery(@QueryParam("name") String name,@QueryParam("author") String author){
-        return "A blog with " +name+ "and" +author+ "has been deleted";
+    @Path("/blog")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Blog deleteBlogbyname(@QueryParam("name") String name, @QueryParam("author") String author) {
+        return bloggingService.deleteBlogbyname(name, author);
+    }
 }
 
-}
