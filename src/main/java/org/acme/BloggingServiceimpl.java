@@ -1,79 +1,58 @@
 package org.acme;
-
 import javax.enterprise.context.ApplicationScoped;
-import java.util.ArrayList;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
 public class BloggingServiceimpl implements BloggingService {
-    List<Blog> blogs = new ArrayList<>();
+
+    @Inject
+    BloggingRepository bloggingRepository;
+
 
     public BloggingServiceimpl() {
 
-        Blog blog = new Blog();
-        blog.author = "Mohammadi Iram";
-        blog.name = "automation";
-        Blog blog2 = new Blog();
-        blog2.author = "Iram";
-        blog2.name = "automation";
-        Blog blog3 = new Blog();
-        blog3.author = "Mohammadi";
-        blog3.name = "Engineering";
-
-
-        blogs.add(blog);
-        blogs.add(blog2);
-        blogs.add(blog3);
-
     }
 
-    public List<Blog> getBlogs() {
-
-        return blogs;
+    @Transactional
+    public List<Blog> GetBlogs() {
+        return Blog.listAll();
     }
 
-    public Blog postBlog(String name, String author) {
-        Blog blog = new Blog();
-        blog.author = author;
-        blog.name = name;
-        blogs.add(blog);
-        return blog;
 
-
-    }
-
-    public Blog getBlogbyname(String name) {
-        for (Blog blog1 : blogs) {
-            if (blog1.name.equals(name)) {
-                blog1.name = name;
-                blogs.add(blog1);
-
-            }
+@Transactional
+public Blog GetBlog(int id) {
+    Blog blog = new Blog();
+    List<Blog> blogs = Blog.listAll();
+    for (Blog blog1 : blogs) {
+        if (blog1.id.equals(id)) {
+            return blog;
         }
-        return null;
     }
-
-    public Blog updateBlogbyname(String name, String author) {
-        for (Blog blog1 : blogs) {
-            if (blog1.name.equals(name)) {
-                blog1.name = name;
-                blog1.author = author;
-
-
-            }
-        }
-        return null;
-    }
-
-    public Blog deleteBlogbyname(String name, String author) {
-        for (Blog blog1 : blogs) {
-            if (blog1.name.equals(name)) {
-                blog1.name = name;
-                blog1.author = author;
-                blogs.remove(blog1);
-            }
-        }
-        return null;
-    }
+    return null;
 }
+
+
+    public List<Blog> blogByAuthorName(String name) {
+
+        return bloggingRepository.getBlogsByAuthorName(name);
+    }
+
+    public Blog UpdateBlog(String name) {
+        return bloggingRepository.updateBlog(name);
+    }
+
+
+    public Blog PostBlog(String name, String author) {
+        return bloggingRepository.postBlog(name,author);
+    }
+
+    public Blog DeleteBlog(String name ,Long id ) {
+        return bloggingRepository.DeleteBlog(name ,id);
+    }
+
+
+}
+
 
