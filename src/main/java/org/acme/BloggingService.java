@@ -6,9 +6,9 @@ import java.util.List;
 public interface BloggingService {
     List<Blog> GetBlogs();
     Blog GetBlog(int id);
-    Blog PostBlog(String name, String author);
-    Blog UpdateBlog(String name);
-    Blog DeleteBlog(String name ,Long id);
+    Blog PostBlog(Blog blog);
+    Blog UpdateBlog(String id ,Blog blog);
+    String DeleteBlog(long id);
     List<Blog> blogByAuthorName(String name);
 
 }

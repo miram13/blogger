@@ -38,21 +38,23 @@ public Blog GetBlog(int id) {
 
         return bloggingRepository.getBlogsByAuthorName(name);
     }
-
-    public Blog UpdateBlog(String name) {
-        return bloggingRepository.updateBlog(name);
+@Transactional
+    public Blog UpdateBlog(String id , Blog blog) {
+        return bloggingRepository.updateBlog(id);
     }
 
 
-    public Blog PostBlog(String name, String author) {
-        return bloggingRepository.postBlog(name,author);
+    public Blog PostBlog(Blog blog) {
+        return bloggingRepository.postBlog(blog);
     }
 
-    public Blog DeleteBlog(String name ,Long id ) {
-        return bloggingRepository.DeleteBlog(name ,id);
+  @Transactional
+  public String DeleteBlog(long id ) {
+      return bloggingRepository.findanddelete(id);
+  }
     }
 
 
-}
+
 
 

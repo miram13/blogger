@@ -21,12 +21,14 @@ public class BloggingRepository implements PanacheRepository<Blog> {
         }
         return  response;
     }
+
+
     public Blog updateBlog(String name) {
         Blog blog = new Blog();
         List<Blog> blogs = Blog.listAll();
         for (Blog blog1 : blogs) {
             if (blog1.name.equals(name)) {
-                blog1.name = name;
+                blog1.name =  name;
                 blog.persist();
                 return blog;
 
@@ -38,10 +40,7 @@ public class BloggingRepository implements PanacheRepository<Blog> {
 
 
 
-    public Blog postBlog(String name, String author) {
-        Blog blog = new Blog();
-        blog.author = author;
-        blog.name = name;
+    public Blog postBlog(Blog blog) {
         blog.persist();
         return blog;
 
@@ -49,17 +48,15 @@ public class BloggingRepository implements PanacheRepository<Blog> {
     }
 
 
-    public Blog DeleteBlog(String name, Long id) {
-        Blog blog = new Blog();
+    String findanddelete(long id) {
+        Blog blog = findById(id);
         if (blog.isPersistent()) {
-            blog.name=name;
-            blog.id = id;
-            boolean deleted = blog.deleteById(id);
-            blog.delete();
+            if (deleteById(id) == true) {
+                return "Item is deleted with id" + id;
+            }
         }
-        return blog;
+        return "Item is not deleted with id";
     }
-
 
 
 }
